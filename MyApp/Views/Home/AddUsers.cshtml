@@ -1,0 +1,117 @@
+﻿@model MyApp.Models.Users
+@{
+    ViewData["Title"] = "Add Users";
+    List<Users> users = TempData["users"] as List<Users>;
+    string deleteMessage = TempData["DeleteMessage"] as string;
+
+    string updateMessage = TempData["UpdateMessage"] as string;
+
+    string addMessage = TempData["AddMessage"] as string;
+
+}
+
+<form action="/home/addusers" method="post" id="addUserForm">
+    
+    <div class="form-group">
+        <label>ID</label>
+        <input type="text" placeholder="Enter Id" asp-for="Id">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="Enter First Name" asp-for="FirstName">
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Enter Last Name" asp-for="LastName">
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Email address</label>
+        <input type="text" placeholder="Enter Email" asp-for="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Phone number</label>
+        <input type="text" placeholder="Enter Phone Number" asp-for="PhoneNumber">
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Age</label>
+        <input type="number" asp-for="Age" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    @*<button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#addConfirmationModel">AddUser</button>*@
+</form>
+
+
+
+<div class="container">
+    @if(users != null && users.Count >= 1)
+    {
+        
+        <table class="table table-dark">
+            <thread>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">FirstName</th>
+                    <th scope="col">LastName</th>
+                    <th scope="col">PhoneNumber</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Age</th>                 
+                </tr>
+            </thread>
+            <tbody>
+                @foreach(var user in users)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.Email</td>
+                        <td>@user.Age</td>
+                        <td>
+                            <form asp-action="UpdateUser" asp-controller="Home" method="post">
+                                <input type="hidden" asp-for="Id" value="@user.Id" />
+                                <button type="submit" class="btn btn-success">Update</button>                          
+                            </form>
+
+                            <form asp-action="DeleteUser" asp-controller="Home" method="post">
+                                <input type="hidden" asp-for="Id" value="@user.Id">
+                                <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">Delete</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(deleteMessage))
+{
+    <div class="alert alert-success">@deleteMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(TempData["UpdateMessage"] as string))
+{
+    <div class="alert alert-success">@TempData["UpdateMessage"]</div>
+}
+
+@if (!string.IsNullOrEmpty(addMessage))
+{
+    <div class="alert alert-success">@addMessage</div>
+}
+
+
+
+
+
